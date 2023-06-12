@@ -2,6 +2,9 @@
 name = "serverseeker"
 version = "0.1.0"
 edition = "2021"
+description = "Rust wrapper for DAMcrafts Minecraft ServerSeeker API"
+keywords = ["minecraft", "serverscanning"]
+repository = "https://github.com/Paddyk45/serverseeker-rs"
 
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 

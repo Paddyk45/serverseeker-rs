@@ -9,7 +9,7 @@ pub struct DiscoveredServer {
     /// The MOTD of the server
     pub description: String,
     /// Unix timestamp of when the server was last scanned online
-    pub last_seen: u32,
+    pub last_seen: i64,
     /// The maximum amount of players on the server
     pub max_players: u32,
     /// The amount of online players at the time of the scan
@@ -22,7 +22,7 @@ pub struct DiscoveredServer {
 
 #[derive(Serialize, Deserialize, Debug)]
 pub struct WhereisServer {
-    pub last_seen: u32,
+    pub last_seen: i64,
     pub name: String,
     pub server: String,
     pub uuid: String
