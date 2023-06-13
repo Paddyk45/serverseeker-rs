@@ -2,14 +2,13 @@
 A Rust wrapper for DAMcrafts ServerSeeker API
 
 This project is currently work-in-progress!
-Also, I'm not the best Rust coder, so the code is bad :/
+Also, I'm not the best Rust coder, so the code is probably bad :/
 
 Example:
 ```rust
 // [dependencies]
 // serverseeker = { git = "https://github.com/Paddyk45/serverseeker-rs" }
 // tokio = { version = "1.28.2", features = ["rt-multi-thread", "macros"] }
-// chrono = "0.4.26"
 
 use serverseeker::ServerSeekerClient;
 
