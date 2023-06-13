@@ -8,7 +8,7 @@ Example:
 ```rust
 // [dependencies]
 // serverseeker = { git = "https://github.com/Paddyk45/serverseeker-rs" }
-// tokio = { version = "1.28.2", features = ["rt-multi-thread"] }
+// tokio = { version = "1.28.2", features = ["rt-multi-thread", "macros"] }
 // chrono = "0.4.26"
 
 use serverseeker::ServerSeekerClient;
@@ -22,7 +22,7 @@ async fn main() {
     let servers = ss.servers(|f| f.cracked(true)).await.unwrap();
     // Print the IP of every server
     for server in servers {
-        println!("Server found: {}, cracked: {}", server.server, server.cracked);
+        println!("Server found: {}, cracked: {:?}", server.server, server.cracked);
     }
 }
 
