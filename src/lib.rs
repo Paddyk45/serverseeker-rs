@@ -21,12 +21,15 @@ impl ServerSeekerClient {
 }
 
 impl ServerSeekerClient {
-    /// Returns a Vect of WhereisServers
-    /// 
-    /// playername: the name of the player you want to get recent servers from
-    pub async fn whereis(&self, mut params: WhereisParams) -> Result<Vec<WhereisServer>, ExitFailure> {
-        params.api_key = self.api_key.clone();
+    /// Get all
+    pub async fn whereis<F>(&self, f: F) -> Result<Vec<WhereisServer>, ExitFailure> 
+    where F: FnOnce(WhereisBuilder) -> WhereisBuilder
+    {
         let url = format!("{API_URL}/whereis");
+        let mut builder = WhereisBuilder::new();
+        builder.params.api_key = Some(self.api_key.clone());
+        let f_builder = f(builder);
+        let params = f_builder.build();
         let body = serde_json::to_string(&params).unwrap();
         let res = self.client.post(url)
             .header(CONTENT_TYPE, "application/json")
@@ -39,7 +42,7 @@ impl ServerSeekerClient {
     }
 
     pub async fn servers<F>(&self, f: F) -> Result<Vec<ServersServer>, ExitFailure>
-    where F: FnOnce(ServersBuilder) -> ServersBuilder,
+    where F: FnOnce(ServersBuilder) -> ServersBuilder
     {
         let url = format!("{API_URL}/servers");
         let mut builder = ServersBuilder::new();
@@ -53,7 +56,6 @@ impl ServerSeekerClient {
             .send().await?
             .text().await
             .unwrap();
-        println!("{res}");
         let data: ServersData = serde_json::from_str(&res)?;
         Ok(data.data)
     }
@@ -105,6 +107,32 @@ impl ServersBuilder {
     }
 
     pub fn build(self) -> ServersParams {
+        self.params
+    }
+}
+
+impl WhereisBuilder {
+    pub fn new() -> Self {
+        Self {
+            params: WhereisParams {
+                api_key: None, 
+                name: None, 
+                uuid: None
+            }
+        }
+    }
+
+    pub fn name(mut self, value: String) -> Self{
+        self.params.name = Some(value);
+        self
+    }
+
+    pub fn uuid(mut self, value: String) -> Self{
+        self.params.uuid = Some(value);
+        self
+    }
+
+    pub fn build(self) -> WhereisParams {
         self.params
     }
 }

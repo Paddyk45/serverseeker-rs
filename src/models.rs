@@ -3,8 +3,13 @@ use serde::{Deserialize, Serialize};
 
 #[derive(Serialize, Debug)]
 pub struct WhereisParams {
-    pub api_key: String,
-    pub name: String
+    pub api_key: Option<String>,
+    pub name: Option<String>,
+    pub uuid: Option<String>
+}
+
+pub struct WhereisBuilder {
+    pub params: WhereisParams
 }
 
 #[derive(Serialize, Deserialize, Debug)]
@@ -41,7 +46,7 @@ pub struct ServersBuilder {
 #[derive(Serialize, Deserialize, Debug)]
 pub struct ServersServer {
     /// If the server has online mode enabled
-    pub cracked: bool,
+    pub cracked: Option<bool>,
     /// The MOTD of the server
     pub description: String,
     /// Unix timestamp of when the server was last scanned online
