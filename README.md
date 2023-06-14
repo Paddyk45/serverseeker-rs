@@ -21,7 +21,7 @@ async fn main() {
     let servers = ss.servers(|f| f.cracked(true)).await.unwrap();
     // Print the IP of every server
     for server in servers {
-        println!("Server found: {}, cracked: {:?}", server.server, server.cracked);
+        println!("IP: {}, cracked: {:?}", server.server, server.cracked);
     }
 }
 
