@@ -1,17 +1,13 @@
+#![allow(unused)]
 use std::io::Error;
 
-mod models;
+pub mod models;
 use models::*;
 
 use exitfailure::ExitFailure;
 use reqwest::header::CONTENT_TYPE;
 
 const API_URL: &str = "https://serverseeker.damcraft.de/api/v1";
-
-pub struct ServerSeekerClient {
-    client: reqwest::Client,
-    api_key: String
-}
 
 impl ServerSeekerClient {
     pub fn new(api_key: String) -> Result<Self, Error> {
@@ -21,7 +17,7 @@ impl ServerSeekerClient {
 }
 
 impl ServerSeekerClient {
-    /// Get all
+    /// Get all servers a player was on during a scan
     pub async fn whereis<F>(&self, f: F) -> Result<Vec<WhereisServer>, ExitFailure> 
     where F: FnOnce(WhereisBuilder) -> WhereisBuilder
     {
@@ -41,6 +37,7 @@ impl ServerSeekerClient {
         Ok(data.data)
     }
 
+    /// Get a list of random servers, optionally with filters
     pub async fn servers<F>(&self, f: F) -> Result<Vec<ServersServer>, ExitFailure>
     where F: FnOnce(ServersBuilder) -> ServersBuilder
     {
