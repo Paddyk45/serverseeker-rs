@@ -10,7 +10,7 @@ Example:
 // serverseeker = { git = "https://github.com/Paddyk45/serverseeker-rs" }
 // tokio = { version = "1.28.2", features = ["rt-multi-thread", "macros"] }
 
-use serverseeker::ServerSeekerClient;
+use serverseeker::models::*;
 
 #[tokio::main]
 async fn main() {
