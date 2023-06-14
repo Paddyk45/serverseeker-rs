@@ -2,7 +2,6 @@ use serde::{Deserialize, Serialize};
 
 /// A ServerSeeker client which stores the api key
 pub struct ServerSeekerClient {
-    pub client: reqwest::Client,
     pub api_key: String
 }
 

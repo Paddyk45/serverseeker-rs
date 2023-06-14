@@ -5,14 +5,13 @@ pub mod models;
 use models::*;
 
 use exitfailure::ExitFailure;
-use reqwest::header::CONTENT_TYPE;
+use minreq::head;
 
 const API_URL: &str = "https://serverseeker.damcraft.de/api/v1";
 
 impl ServerSeekerClient {
     pub fn new(api_key: String) -> Result<Self, Error> {
-        let client = reqwest::Client::new();
-        Ok(ServerSeekerClient{client, api_key})
+        Ok(ServerSeekerClient{api_key})
     }
 }
 
@@ -27,13 +26,11 @@ impl ServerSeekerClient {
         let f_builder = f(builder);
         let params = f_builder.build();
         let body = serde_json::to_string(&params).unwrap();
-        let res = self.client.post(url)
-            .header(CONTENT_TYPE, "application/json")
-            .body(body)
-            .send().await?
-            .text().await
-            .unwrap();
-        let data: WhereisData = serde_json::from_str(&res)?;
+        let res = minreq::post(url)
+            .with_header("Content-Type", "application/json")
+            .with_body(body)
+            .send()?;
+        let data: WhereisData = serde_json::from_str(res.as_str().unwrap())?;
         Ok(data.data)
     }
 
@@ -47,13 +44,11 @@ impl ServerSeekerClient {
         let f_builder = f(builder);
         let params = f_builder.build();
         let body = serde_json::to_string(&params).unwrap();
-        let res = self.client.post(url)
-            .header(CONTENT_TYPE, "application/json")
-            .body(body)
-            .send().await?
-            .text().await
-            .unwrap();
-        let data: ServersData = serde_json::from_str(&res)?;
+        let res = minreq::post(url)
+            .with_header("Content-Type", "application/json")
+            .with_body(body)
+            .send()?;
+        let data: ServersData = serde_json::from_str(res.as_str().unwrap())?;
         Ok(data.data)
     }
 
@@ -67,13 +62,11 @@ impl ServerSeekerClient {
         let f_builder = f(builder);
         let params = f_builder.build();
         let body = serde_json::to_string(&params).unwrap();
-        let res = self.client.post(url)
-            .header(CONTENT_TYPE, "application/json")
-            .body(body)
-            .send().await?
-            .text().await
-            .unwrap();
-        let info: ServerInfoInfo = serde_json::from_str(&res)?;
+        let res = minreq::post(url)
+            .with_header("Content-Type", "application/json")
+            .with_body(body)
+            .send()?;
+        let info: ServerInfoInfo = serde_json::from_str(res.as_str().unwrap())?;
         Ok(info)
     }
 }
