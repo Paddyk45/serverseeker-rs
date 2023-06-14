@@ -37,7 +37,7 @@ impl ServerSeekerClient {
         Ok(data.data)
     }
 
-    /// Get a list of random servers, optionally with filters
+    /// Get a list of random servers, optionally with criteria
     pub async fn servers<F>(&self, f: F) -> Result<Vec<ServersServer>, ExitFailure>
     where F: FnOnce(ServersBuilder) -> ServersBuilder
     {
@@ -55,6 +55,26 @@ impl ServerSeekerClient {
             .unwrap();
         let data: ServersData = serde_json::from_str(&res)?;
         Ok(data.data)
+    }
+
+    /// Get information about a server
+    pub async fn server_info<F>(&self, f: F) -> Result<ServerInfoInfo, ExitFailure>
+    where F: FnOnce(ServerInfoBuilder) -> ServerInfoBuilder
+    {
+        let url = format!("{API_URL}/server_info");
+        let mut builder = ServerInfoBuilder::new();
+        builder.params.api_key = Some(self.api_key.clone());
+        let f_builder = f(builder);
+        let params = f_builder.build();
+        let body = serde_json::to_string(&params).unwrap();
+        let res = self.client.post(url)
+            .header(CONTENT_TYPE, "application/json")
+            .body(body)
+            .send().await?
+            .text().await
+            .unwrap();
+        let info: ServerInfoInfo = serde_json::from_str(&res)?;
+        Ok(info)
     }
 }
 
@@ -130,6 +150,32 @@ impl WhereisBuilder {
     }
 
     pub fn build(self) -> WhereisParams {
+        self.params
+    }
+}
+
+impl ServerInfoBuilder {
+    pub fn new() -> Self {
+        Self {
+            params: ServerInfoParams {
+                api_key: None, 
+                ip: String::new(), 
+                port: None
+            }
+        }
+    }
+
+    pub fn ip(mut self, value: String) -> Self{
+        self.params.ip = value;
+        self
+    }
+
+    pub fn port(mut self, value: u16) -> Self{
+        self.params.port = Some(value);
+        self
+    }
+
+    pub fn build(self) -> ServerInfoParams {
         self.params
     }
 }
