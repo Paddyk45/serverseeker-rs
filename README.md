@@ -26,3 +26,4 @@ async fn main() {
 }
 
 ```
+For more examples, take a look at the [wiki](https://github.com/Paddyk45/serverseeker-rs/wiki)
