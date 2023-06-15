@@ -4,10 +4,19 @@ use std::io::Error;
 pub mod models;
 use models::*;
 
-use exitfailure::ExitFailure;
-use minreq::head;
+use serde::Deserialize;
 
 const API_URL: &str = "https://serverseeker.damcraft.de/api/v1";
+
+/// A response from the ServerSeeker API
+#[derive(Debug, Deserialize)]
+#[serde(untagged)]
+enum APIResponse {
+    APIError(APIError),
+    WhereisData(WhereisData),
+    ServersData(ServersData),
+    ServerInfoInfo(ServerInfoInfo)
+}
 
 impl ServerSeekerClient {
     pub fn new(api_key: String) -> Result<Self, Error> {
@@ -17,7 +26,7 @@ impl ServerSeekerClient {
 
 impl ServerSeekerClient {
     /// Get all servers a player was on during a scan
-    pub async fn whereis<F>(&self, f: F) -> Result<Vec<WhereisServer>, ExitFailure> 
+    pub async fn whereis<F>(&self, f: F) -> Result<Vec<WhereisServer>, failure::Error> 
     where F: FnOnce(WhereisBuilder) -> WhereisBuilder
     {
         let url = format!("{API_URL}/whereis");
@@ -30,12 +39,17 @@ impl ServerSeekerClient {
             .with_header("Content-Type", "application/json")
             .with_body(body)
             .send()?;
-        let data: WhereisData = serde_json::from_str(res.as_str().unwrap())?;
-        Ok(data.data)
+        let data: APIResponse = serde_json::from_str(res.as_str().unwrap())?;
+        println!("{:?}", data);
+        match data {
+            APIResponse::WhereisData(d) => Ok(d.data),
+            APIResponse::APIError(e) => Err(failure::err_msg(e.error)),
+            _ => Err(failure::err_msg("An unknown error occured"))
+        }
     }
 
     /// Get a list of random servers, optionally with criteria
-    pub async fn servers<F>(&self, f: F) -> Result<Vec<ServersServer>, ExitFailure>
+    pub async fn servers<F>(&self, f: F) -> Result<Vec<ServersServer>, failure::Error>
     where F: FnOnce(ServersBuilder) -> ServersBuilder
     {
         let url = format!("{API_URL}/servers");
@@ -48,12 +62,16 @@ impl ServerSeekerClient {
             .with_header("Content-Type", "application/json")
             .with_body(body)
             .send()?;
-        let data: ServersData = serde_json::from_str(res.as_str().unwrap())?;
-        Ok(data.data)
+        let data: APIResponse = serde_json::from_str(res.as_str().unwrap())?;
+        match data {
+            APIResponse::ServersData(d) => Ok(d.data),
+            APIResponse::APIError(e) => Err(failure::err_msg(e.error)),
+            _ => Err(failure::err_msg("An unknown error occured"))
+        }
     }
 
     /// Get information about a server
-    pub async fn server_info<F>(&self, f: F) -> Result<ServerInfoInfo, ExitFailure>
+    pub async fn server_info<F>(&self, f: F) -> Result<ServerInfoInfo, failure::Error>
     where F: FnOnce(ServerInfoBuilder) -> ServerInfoBuilder
     {
         let url = format!("{API_URL}/server_info");
@@ -66,8 +84,12 @@ impl ServerSeekerClient {
             .with_header("Content-Type", "application/json")
             .with_body(body)
             .send()?;
-        let info: ServerInfoInfo = serde_json::from_str(res.as_str().unwrap())?;
-        Ok(info)
+        let info: APIResponse = serde_json::from_str(res.as_str().unwrap())?;
+        match info {
+            APIResponse::ServerInfoInfo(info) => Ok(info),
+            APIResponse::APIError(e) => Err(failure::err_msg(e.error)),
+            _ => Err(failure::err_msg("An unknown error occured"))
+        }
     }
 }
 

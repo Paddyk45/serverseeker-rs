@@ -5,6 +5,12 @@ pub struct ServerSeekerClient {
     pub api_key: String
 }
 
+/// An error
+#[derive(Deserialize, Debug)]
+pub struct APIError {
+    pub error: String
+}
+
 // For .whereis():
 /// The search parameters
 #[derive(Serialize)]
@@ -36,7 +42,7 @@ pub struct WhereisServer {
 }
 
 /// The data array from the response
-#[derive(Deserialize)]
+#[derive(Deserialize, Debug)]
 pub struct WhereisData {
     /// An array of servers the player was seen on. Limited to 1000
     pub data: Vec<WhereisServer>
