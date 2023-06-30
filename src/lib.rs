@@ -40,7 +40,6 @@ impl ServerSeekerClient {
             .with_body(body)
             .send()?;
         let data: APIResponse = serde_json::from_str(res.as_str().unwrap())?;
-        println!("{:?}", data);
         match data {
             APIResponse::WhereisData(d) => Ok(d.data),
             APIResponse::APIError(e) => Err(failure::err_msg(e.error)),
