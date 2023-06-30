@@ -1,8 +1,8 @@
 #![allow(unused)]
 use std::io::Error;
 
-pub mod models;
-use models::*;
+mod models;
+pub use models::*;
 
 use serde::Deserialize;
 
