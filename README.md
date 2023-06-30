@@ -1,3 +1,6 @@
+[![Docs](https://img.shields.io/badge/docs-online-informational)](https://docs.rs/serverseeker)
+![Crates.io](https://img.shields.io/crates/d/serverseeker)
+
 # serverseeker-rs
 A Rust wrapper for DAMcrafts ServerSeeker API
 
