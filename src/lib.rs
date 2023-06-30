@@ -137,7 +137,7 @@ impl ServersBuilder {
         self
     }
 
-    pub fn build(self) -> ServersParams {
+    fn build(self) -> ServersParams {
         self.params
     }
 }
@@ -163,7 +163,7 @@ impl WhereisBuilder {
         self
     }
 
-    pub fn build(self) -> WhereisParams {
+    fn build(self) -> WhereisParams {
         self.params
     }
 }
@@ -189,7 +189,7 @@ impl ServerInfoBuilder {
         self
     }
 
-    pub fn build(self) -> ServerInfoParams {
+    fn build(self) -> ServerInfoParams {
         self.params
     }
 }
