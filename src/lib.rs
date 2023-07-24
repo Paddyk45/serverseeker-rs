@@ -1,3 +1,4 @@
+
 #![allow(unused)]
 use std::io::Error;
 
@@ -6,7 +7,7 @@ pub use models::*;
 
 use serde::Deserialize;
 
-const API_URL: &str = "https://serverseeker.damcraft.de/api/v1";
+const API_URL: &str = "https://api.serverseeker.net";
 
 /// A response from the ServerSeeker API
 #[derive(Debug, Deserialize)]
