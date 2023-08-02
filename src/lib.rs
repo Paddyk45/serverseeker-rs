@@ -58,7 +58,6 @@ impl ServerSeekerClient {
         let f_builder = f(builder);
         let params = f_builder.build();
         let body = serde_json::to_string(&params).unwrap();
-        println!("{body:?}");
         let res = minreq::post(url)
             .with_header("Content-Type", "application/json")
             .with_body(body)
