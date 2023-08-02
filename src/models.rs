@@ -1,4 +1,4 @@
-use serde::{Deserialize, Serialize};
+use serde::{Deserialize, Serialize, Serializer};
 
 /// A ServerSeeker client which stores the api key
 pub struct ServerSeekerClient {
@@ -12,7 +12,7 @@ pub struct APIError {
 }
 
 // For .whereis():
-/// The search parameters
+#[doc(hidden)]
 #[derive(Serialize)]
 pub struct WhereisParams {
     /// Your api_key
@@ -23,7 +23,7 @@ pub struct WhereisParams {
     pub uuid: Option<String>
 }
 
-/// Builder
+#[doc(hidden)]
 pub struct WhereisBuilder {
     pub params: WhereisParams
 }
@@ -35,7 +35,7 @@ pub struct WhereisServer {
     pub last_seen: i64,
     /// The name of the player
     pub name: String,
-    /// The ip and port of the server
+    /// The ip:port of the server
     pub server: String,
     /// The uuid of the player 
     pub uuid: String
@@ -50,13 +50,48 @@ pub struct WhereisData {
 
 
 // For .servers():
+#[doc(hidden)]
+pub enum MaxOnlinePlayers {
+    Num(u16),
+    Inf
+}
+
+
+
+impl Serialize for MaxOnlinePlayers {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: Serializer,
+    {
+        match self {
+            MaxOnlinePlayers::Num(value) => serializer.serialize_u16(*value),
+            MaxOnlinePlayers::Inf => serializer.serialize_str("inf"),
+        }
+    }
+}
+
+/// Software of a server
+pub enum ServerSoftware {
+    Any,
+    Vanilla,
+    Paper,
+    Spigot,
+    Bukkit
+}
+
 /// The search parameters
 #[derive(Serialize)]
 pub struct ServersParams {
     /// Your api_key
     pub api_key: Option<String>,
-    /// The minimum amount of online players the server should have
-    pub online_players: Option<u16>,
+    /// The amount of online players the server should have
+    #[serde(rename = "online_players")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub num_online_players: Option<u16>,
+    /// Min-Max range of online players
+    #[serde(rename = "online_players")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub range_online_players: Option<(u16, MaxOnlinePlayers)>,
     /// The maximum amount of players the server should hold
     pub max_players: Option<u16>,
     /// Whether the server should be cracked or not (onlime mode disabled)
@@ -66,10 +101,13 @@ pub struct ServersParams {
     /// The [protocol version](https://wiki.vg/Protocol_version_numbers) of the server
     pub protocol: Option<i32>,
     /// The server should have been online after this unix timestamp Defaults to showing all servers which were online at last ping.
-    pub online_after: Option<u16>
+    pub online_after: Option<u16>,
+    /// The software of the server
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub software: Option<String>
 }
 
-/// Builder
+#[doc(hidden)]
 pub struct ServersBuilder {
     pub params: ServersParams
 }
@@ -114,7 +152,7 @@ pub struct ServerInfoParams {
     pub port: Option<u16>
 }
 
-/// Builder
+#[doc(hidden)]
 pub struct ServerInfoBuilder {
     pub params: ServerInfoParams
 }

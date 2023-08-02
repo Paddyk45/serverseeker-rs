@@ -57,6 +57,7 @@ impl ServerSeekerClient {
         let f_builder = f(builder);
         let params = f_builder.build();
         let body = serde_json::to_string(&params).unwrap();
+        println!("{body:?}");
         let res = minreq::post(url)
             .with_header("Content-Type", "application/json")
             .with_body(body)
@@ -97,18 +98,24 @@ impl ServersBuilder {
         Self {
             params: ServersParams {
                 api_key: None,
-                online_players: None, 
+                num_online_players: None, 
+                range_online_players: None,
                 max_players: None, 
                 cracked: None, 
                 description: None, 
                 protocol: None, 
-                online_after: None 
+                online_after: None,
+                software: None,
             }
         }
     }
+    pub fn num_online_players(mut self, value: u16) -> Self {
+        self.params.num_online_players = Some(value);
+        self
+    }
 
-    pub fn online_players(mut self, value: u16) -> Self {
-        self.params.online_players = Some(value);
+    pub fn range_online_players(mut self, value: (u16, MaxOnlinePlayers)) -> Self {
+        self.params.range_online_players = Some(value);
         self
     }
 
@@ -134,6 +141,11 @@ impl ServersBuilder {
 
     pub fn online_after(mut self, value: u16) -> Self {
         self.params.online_after = Some(value);
+        self
+    }
+
+    pub fn software(mut self, value: String) -> Self {
+        self.params.software = Some(value);
         self
     }
 
