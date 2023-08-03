@@ -71,6 +71,7 @@ impl Serialize for MaxOnlinePlayers {
 }
 
 /// Software of a server
+#[derive(Serialize)]
 pub enum ServerSoftware {
     Any,
     Vanilla,
@@ -104,7 +105,7 @@ pub struct ServersParams {
     pub online_after: Option<u16>,
     /// The software of the server
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub software: Option<String>
+    pub software: Option<ServerSoftware>
 }
 
 #[doc(hidden)]

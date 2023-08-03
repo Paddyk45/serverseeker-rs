@@ -144,7 +144,7 @@ impl ServersBuilder {
         self
     }
 
-    pub fn software(mut self, value: String) -> Self {
+    pub fn software(mut self, value: ServerSoftware) -> Self {
         self.params.software = Some(value);
         self
     }
