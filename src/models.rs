@@ -50,7 +50,6 @@ pub struct WhereisData {
 
 
 // For .servers():
-#[doc(hidden)]
 pub enum MaxOnlinePlayers {
     Num(u16),
     Inf
