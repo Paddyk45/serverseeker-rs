@@ -1,6 +1,6 @@
 [package]
 name = "serverseeker"
-version = "0.2.7"
+version = "0.2.8"
 edition = "2021"
 description = "Rust wrapper for DAMcrafts Minecraft ServerSeeker API"
 keywords = ["minecraft", "serverscanning"]
