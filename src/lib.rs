@@ -1,6 +1,5 @@
-
 #![allow(unused)]
-use std::io::Error;
+use std::{io::Error, vec};
 
 mod models;
 pub use models::*;
@@ -16,7 +15,7 @@ enum APIResponse {
     APIError(APIError),
     WhereisData(WhereisData),
     ServersData(ServersData),
-    ServerInfoInfo(ServerInfoInfo)
+    ServerInfoInfo(ServerInfoInfo),
 }
 
 impl ServerSeekerClient {
@@ -66,7 +65,7 @@ impl ServerSeekerClient {
         match data {
             APIResponse::ServersData(d) => Ok(d.data),
             APIResponse::APIError(e) => Err(failure::err_msg(e.error)),
-            _ => Err(failure::err_msg("An unknown error occured"))
+            _ => Ok(Vec::new())
         }
     }
 
