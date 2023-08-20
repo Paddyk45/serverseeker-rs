@@ -104,7 +104,11 @@ pub struct ServersParams {
     pub online_after: Option<u16>,
     /// The software of the server
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub software: Option<ServerSoftware>
+    pub software: Option<ServerSoftware>,
+    /// The country code of the server. See [here](https://en.wikipedia.org/wiki/ISO_3166-1_alpha-2)
+    pub country_code: Option<String>,
+    /// The AS number of the server. You can get it easily from ipinfo. See [here](https://en.wikipedia.org/wiki/Autonomous_system_(Internet))
+    pub asn: Option<i16>
 }
 
 #[doc(hidden)]
@@ -130,7 +134,7 @@ pub struct ServersServer {
     /// The ip:port of the server
     pub server: String,
     /// The minecraft version of the server
-    pub version: String
+    pub version: String,
 }
 
 /// The data array from the response

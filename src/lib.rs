@@ -106,6 +106,8 @@ impl ServersBuilder {
                 protocol: None, 
                 online_after: None,
                 software: None,
+                country_code: None,
+                asn: None
             }
         }
     }
@@ -146,6 +148,16 @@ impl ServersBuilder {
 
     pub fn software(mut self, value: ServerSoftware) -> Self {
         self.params.software = Some(value);
+        self
+    }
+
+    pub fn country_code(mut self, value: String) -> Self {
+        self.params.country_code = Some(value);
+        self
+    }
+
+    pub fn asn(mut self, value: i16) -> Self {
+        self.params.asn = Some(value);
         self
     }
 
