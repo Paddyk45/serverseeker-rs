@@ -29,8 +29,6 @@ pub enum UsernameOrUuid {
 #[derive(Clone, Builder, Serialize)]
 #[builder(setter(into))]
 pub struct WhereisParams {
-    /// Your api_key
-    pub api_key: String,
     /// The name or uuid of the player you want to find
     pub player: UsernameOrUuid,
 }
@@ -86,8 +84,6 @@ pub enum ServerSoftware {
 #[derive(Clone, Builder, Serialize)]
 #[builder(setter(into))]
 pub struct ServersParams {
-    /// Your api_key
-    pub api_key: Option<String>,
     /// The amount of online players the server should have
     #[serde(rename = "online_players")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -145,8 +141,6 @@ pub struct ServersServer {
 #[derive(Clone, Builder, Serialize)]
 #[builder(setter(into))]
 pub struct ServerInfoParams {
-    /// Your api_key
-    pub api_key: Option<String>,
     /// The IP of the server
     pub ip: String,
     /// The port of the server (default=25565)
