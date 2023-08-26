@@ -4,25 +4,25 @@ use serde_json::Value;
 
 /// A ServerSeeker client which stores the api key
 pub struct ServerSeekerClient {
-    pub api_key: String
+    pub api_key: String,
 }
 
 /// An error
 #[derive(Deserialize, Debug)]
 pub struct APIError {
-    pub error: String
+    pub error: String,
 }
 
 /// A response
 #[derive(Deserialize, Debug)]
 pub struct APIData {
-    pub data: Value
+    pub data: Value,
 }
 
 #[derive(Clone, Serialize)]
 pub enum UsernameOrUuid {
     Username(String),
-    Uuid(String)
+    Uuid(String),
 }
 
 // For .whereis():
@@ -45,18 +45,16 @@ pub struct WhereisServer {
     pub name: String,
     /// The ip:port of the server
     pub server: String,
-    /// The uuid of the player 
-    pub uuid: String
+    /// The uuid of the player
+    pub uuid: String,
 }
 
 // For .servers():
 #[derive(Clone)]
 pub enum MaxOnlinePlayers {
     Num(u16),
-    Inf
+    Inf,
 }
-
-
 
 impl Serialize for MaxOnlinePlayers {
     fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
@@ -77,7 +75,7 @@ pub enum ServerSoftware {
     Vanilla,
     Paper,
     Spigot,
-    Bukkit
+    Bukkit,
 }
 
 /// The search parameters
@@ -108,7 +106,7 @@ pub struct ServersParams {
     /// The country code of the server. See [here](https://en.wikipedia.org/wiki/ISO_3166-1_alpha-2)
     pub country_code: Option<String>,
     /// The AS number of the server. You can get it easily from ipinfo. See [here](https://en.wikipedia.org/wiki/Autonomous_system_(Internet))
-    pub asn: Option<i16>
+    pub asn: Option<i16>,
 }
 
 #[derive(Clone, Deserialize, Debug)]
@@ -135,7 +133,6 @@ pub struct ServersServer {
     pub version: String,
 }
 
-
 // For .server_info()
 /// The server ip/port
 #[derive(Clone, Builder, Serialize)]
@@ -144,7 +141,7 @@ pub struct ServerInfoParams {
     /// The IP of the server
     pub ip: String,
     /// The port of the server (default=25565)
-    pub port: Option<u16>
+    pub port: Option<u16>,
 }
 
 /// The information about the server
@@ -165,7 +162,7 @@ pub struct ServerInfo {
     /// The minecraft version of the server
     pub version: String,
     /// An array of when which players were seen on the server. Limited to 1000
-    pub players: Vec<ServerInfoPlayer>
+    pub players: Vec<ServerInfoPlayer>,
 }
 
 /// A player that was seen on a server
@@ -176,5 +173,5 @@ pub struct ServerInfoPlayer {
     /// The name of the player
     pub name: String,
     /// The uuid of the player
-    pub uuid: String
+    pub uuid: String,
 }
