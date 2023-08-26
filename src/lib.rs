@@ -24,7 +24,7 @@ impl ServerSeekerClient {
 
 impl ServerSeekerClient {
     /// Get all servers a player was on during a scan
-    pub async fn whereis(&self, params: WhereisParams) -> Result<WhereisServers, failure::Error> {
+    pub async fn whereis_from_builder(&self, params: WhereisParams) -> Result<WhereisServers, failure::Error> {
         let url = format!("{API_URL}/whereis");
         let body = serde_json::to_string(&params).unwrap();
         let res = minreq::post(url)
@@ -40,8 +40,12 @@ impl ServerSeekerClient {
         }
     }
 
+    pub async fn whereis<P>(&self, predicate: P) -> Result<WhereisServers, failure::Error> where P: FnOnce(WhereisParamsBuilder) -> WhereisParams  {
+        self.whereis_from_builder(predicate(WhereisParamsBuilder::default())).await
+    }
+
     /// Get a list of random servers, optionally with criteria
-    pub async fn servers(&self, params: ServersParams) -> Result<ServersServers, failure::Error> {
+    pub async fn servers_from_builder(&self, params: ServersParams) -> Result<ServersServers, failure::Error> {
         let url = format!("{API_URL}/servers");
         let body = serde_json::to_string(&params).unwrap();
         let res = minreq::post(url)
@@ -57,8 +61,12 @@ impl ServerSeekerClient {
         }
     }
 
+    pub async fn servers<P>(&self, predicate: P) -> Result<ServersServers, failure::Error> where P: FnOnce(ServersParamsBuilder) -> ServersParams  {
+        self.servers_from_builder(predicate(ServersParamsBuilder::default())).await
+    }
+
     /// Get information about a server
-    pub async fn server_info(
+    pub async fn server_info_from_builder(
         &self,
         params: ServerInfoParams,
     ) -> Result<ServerInfo, failure::Error> {
@@ -75,6 +83,10 @@ impl ServerSeekerClient {
             APIResponse::Error(e) => Err(failure::err_msg(e.error)),
             _ => Err(failure::err_msg("Invalid Response")),
         }
+    }
+
+    pub async fn server_info<P>(&self, predicate: P) -> Result<ServerInfo, failure::Error> where P: FnOnce(ServerInfoParamsBuilder) -> ServerInfoParams  {
+        self.server_info_from_builder(predicate(ServerInfoParamsBuilder::default())).await
     }
 }
 
