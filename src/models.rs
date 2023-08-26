@@ -153,8 +153,8 @@ pub struct ServersServer {
 
 // For .server_info()
 /// The server ip/port
-#[derive(Clone, Builder, Serialize)]
-#[builder(setter(into))]
+#[derive(Clone, Default, Builder, Serialize)]
+#[builder(setter(into), default)]
 pub struct ServerInfoParams {
     /// The IP of the server
     pub ip: String,
