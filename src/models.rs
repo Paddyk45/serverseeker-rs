@@ -36,6 +36,15 @@ pub struct WhereisParams {
 #[derive(Clone, Deserialize, Debug)]
 pub struct WhereisServers(pub Vec<WhereisServer>);
 
+impl IntoIterator for WhereisServers {
+    type Item = WhereisServer;
+    type IntoIter = std::vec::IntoIter<Self::Item>;
+
+    fn into_iter(self) -> Self::IntoIter {
+        self.0.into_iter()
+    }
+}
+
 /// A server in the results
 #[derive(Clone, Deserialize, Debug)]
 pub struct WhereisServer {
@@ -111,6 +120,15 @@ pub struct ServersParams {
 
 #[derive(Clone, Deserialize, Debug)]
 pub struct ServersServers(pub Vec<ServersServer>);
+
+impl IntoIterator for ServersServers {
+    type Item = ServersServer;
+    type IntoIter = std::vec::IntoIter<Self::Item>;
+
+    fn into_iter(self) -> Self::IntoIter {
+        self.0.into_iter()
+    }
+}
 
 /// A server in the results
 #[derive(Clone, Deserialize, Debug)]
