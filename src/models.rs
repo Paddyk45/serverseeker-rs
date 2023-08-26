@@ -34,7 +34,7 @@ pub struct WhereisParams {
 }
 
 #[derive(Clone, Deserialize, Debug)]
-pub struct WhereisServers(#[serde(rename(serialize = "data"))] pub Vec<WhereisServer>);
+pub struct WhereisServers(pub Vec<WhereisServer>);
 
 impl IntoIterator for WhereisServers {
     type Item = WhereisServer;
@@ -119,7 +119,7 @@ pub struct ServersParams {
 }
 
 #[derive(Clone, Deserialize, Debug)]
-pub struct ServersServers(#[serde(rename(serialize = "data"))] pub Vec<ServersServer>);
+pub struct ServersServers(pub Vec<ServersServer>);
 
 impl IntoIterator for ServersServers {
     type Item = ServersServer;
@@ -153,8 +153,8 @@ pub struct ServersServer {
 
 // For .server_info()
 /// The server ip/port
-#[derive(Clone, Default, Builder, Serialize)]
-#[builder(setter(into), default)]
+#[derive(Clone, Builder, Serialize)]
+#[builder(setter(into))]
 pub struct ServerInfoParams {
     /// The IP of the server
     pub ip: String,
