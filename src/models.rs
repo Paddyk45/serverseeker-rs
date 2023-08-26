@@ -81,7 +81,7 @@ pub enum ServerSoftware {
 }
 
 /// The search parameters
-#[derive(Clone, Builder, Serialize)]
+#[derive(Default, Clone, Builder, Serialize)]
 #[builder(setter(into))]
 pub struct ServersParams {
     /// The amount of online players the server should have
