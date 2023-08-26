@@ -1,4 +1,6 @@
+use derive_builder::Builder;
 use serde::{Deserialize, Serialize, Serializer};
+use serde_json::Value;
 
 /// A ServerSeeker client which stores the api key
 pub struct ServerSeekerClient {
@@ -11,25 +13,33 @@ pub struct APIError {
     pub error: String
 }
 
+/// A response
+#[derive(Deserialize, Debug)]
+pub struct APIData {
+    pub data: Value
+}
+
+#[derive(Clone, Serialize)]
+pub enum UsernameOrUuid {
+    Username(String),
+    Uuid(String)
+}
+
 // For .whereis():
-#[doc(hidden)]
-#[derive(Serialize)]
+#[derive(Clone, Builder, Serialize)]
+#[builder(setter(into))]
 pub struct WhereisParams {
     /// Your api_key
-    pub api_key: Option<String>,
-    /// The name of the player you want to find
-    pub name: Option<String>,
-    /// The uuid of the player you want to find
-    pub uuid: Option<String>
+    pub api_key: String,
+    /// The name or uuid of the player you want to find
+    pub player: UsernameOrUuid,
 }
 
-#[doc(hidden)]
-pub struct WhereisBuilder {
-    pub params: WhereisParams
-}
+#[derive(Clone, Deserialize, Debug)]
+pub struct WhereisServers(pub Vec<WhereisServer>);
 
 /// A server in the results
-#[derive(Deserialize, Debug)]
+#[derive(Clone, Deserialize, Debug)]
 pub struct WhereisServer {
     /// The last time the player was seen on the server (unix timestamp)
     pub last_seen: i64,
@@ -41,15 +51,8 @@ pub struct WhereisServer {
     pub uuid: String
 }
 
-/// The data array from the response
-#[derive(Deserialize, Debug)]
-pub struct WhereisData {
-    /// An array of servers the player was seen on. Limited to 1000
-    pub data: Vec<WhereisServer>
-}
-
-
 // For .servers():
+#[derive(Clone)]
 pub enum MaxOnlinePlayers {
     Num(u16),
     Inf
@@ -70,7 +73,7 @@ impl Serialize for MaxOnlinePlayers {
 }
 
 /// Software of a server
-#[derive(Serialize)]
+#[derive(Clone, Serialize)]
 pub enum ServerSoftware {
     Any,
     Vanilla,
@@ -80,7 +83,8 @@ pub enum ServerSoftware {
 }
 
 /// The search parameters
-#[derive(Serialize)]
+#[derive(Clone, Builder, Serialize)]
+#[builder(setter(into))]
 pub struct ServersParams {
     /// Your api_key
     pub api_key: Option<String>,
@@ -111,13 +115,11 @@ pub struct ServersParams {
     pub asn: Option<i16>
 }
 
-#[doc(hidden)]
-pub struct ServersBuilder {
-    pub params: ServersParams
-}
+#[derive(Clone, Deserialize, Debug)]
+pub struct ServersServers(pub Vec<ServersServer>);
 
 /// A server in the results
-#[derive(Deserialize, Debug)]
+#[derive(Clone, Deserialize, Debug)]
 pub struct ServersServer {
     /// Whether the server is cracked or not. None if unknown
     pub cracked: Option<bool>,
@@ -137,16 +139,11 @@ pub struct ServersServer {
     pub version: String,
 }
 
-/// The data array from the response
-#[derive(Deserialize, Debug)]
-pub struct ServersData {
-    pub data: Vec<ServersServer>
-}
-
 
 // For .server_info()
 /// The server ip/port
-#[derive(Serialize)]
+#[derive(Clone, Builder, Serialize)]
+#[builder(setter(into))]
 pub struct ServerInfoParams {
     /// Your api_key
     pub api_key: Option<String>,
@@ -156,14 +153,12 @@ pub struct ServerInfoParams {
     pub port: Option<u16>
 }
 
-#[doc(hidden)]
-pub struct ServerInfoBuilder {
-    pub params: ServerInfoParams
-}
+#[derive(Clone, Deserialize, Debug)]
+pub struct ServerInfoServers(pub Vec<ServerInfo>);
 
 /// The information about the server
-#[derive(Serialize, Deserialize, Debug)]
-pub struct ServerInfoInfo {
+#[derive(Clone, Serialize, Deserialize, Debug)]
+pub struct ServerInfo {
     /// Whether the server is cracked or not. None if unknown
     pub cracked: Option<bool>,
     /// The description (MOTD) of the server
@@ -183,7 +178,7 @@ pub struct ServerInfoInfo {
 }
 
 /// A player that was seen on a server
-#[derive(Serialize, Deserialize, Debug)]
+#[derive(Clone, Serialize, Deserialize, Debug)]
 pub struct ServerInfoPlayer {
     /// The last time the player was seen on the server (unix timestamp)
     pub last_seen: i64,
