@@ -153,9 +153,6 @@ pub struct ServerInfoParams {
     pub port: Option<u16>
 }
 
-#[derive(Clone, Deserialize, Debug)]
-pub struct ServerInfoServers(pub Vec<ServerInfo>);
-
 /// The information about the server
 #[derive(Clone, Serialize, Deserialize, Debug)]
 pub struct ServerInfo {

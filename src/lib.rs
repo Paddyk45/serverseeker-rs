@@ -60,7 +60,7 @@ impl ServerSeekerClient {
     }
 
     /// Get information about a server
-    pub async fn server_info(&self, params: ServerInfoParams) -> Result<ServerInfoServers, failure::Error>
+    pub async fn server_info(&self, params: ServerInfoParams) -> Result<ServerInfo, failure::Error>
     {
         let url = format!("{API_URL}/server_info");
         let body = serde_json::to_string(&params).unwrap();
@@ -69,7 +69,7 @@ impl ServerSeekerClient {
             .with_header("Content-Type", "application/json")
             .with_body(body)
             .send()?;
-        let info: APIResponse<ServerInfoServers> = serde_json::from_str(res.as_str().unwrap())?;
+        let info: APIResponse<ServerInfo> = serde_json::from_str(res.as_str().unwrap())?;
         match info {
             APIResponse::Data(info) => Ok(info),
             APIResponse::Error(e) => Err(failure::err_msg(e.error)),
