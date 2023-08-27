@@ -40,8 +40,8 @@ impl ServerSeekerClient {
         }
     }
 
-    pub async fn whereis<P>(&self, predicate: P) -> Result<WhereisServers, failure::Error> where P: FnOnce(WhereisParamsBuilder) -> WhereisParams  {
-        self.whereis_from_builder(predicate(WhereisParamsBuilder::default())).await
+    pub async fn whereis<P>(&self, predicate: P) -> Result<WhereisServers, failure::Error> where P: FnOnce(WhereisParamsBuilder) -> WhereisParamsBuilder  {
+        self.whereis_from_builder(predicate(WhereisParamsBuilder::default()).build()?).await
     }
 
     /// Get a list of random servers, optionally with criteria
@@ -61,8 +61,8 @@ impl ServerSeekerClient {
         }
     }
 
-    pub async fn servers<P>(&self, predicate: P) -> Result<ServersServers, failure::Error> where P: FnOnce(ServersParamsBuilder) -> ServersParams  {
-        self.servers_from_builder(predicate(ServersParamsBuilder::default())).await
+    pub async fn servers<P>(&self, predicate: P) -> Result<ServersServers, failure::Error> where P: FnOnce(ServersParamsBuilder) -> ServersParamsBuilder  {
+        self.servers_from_builder(predicate(ServersParamsBuilder::default()).build()?).await
     }
 
     /// Get information about a server
@@ -85,8 +85,8 @@ impl ServerSeekerClient {
         }
     }
 
-    pub async fn server_info<P>(&self, predicate: P) -> Result<ServerInfo, failure::Error> where P: FnOnce(ServerInfoParamsBuilder) -> ServerInfoParams  {
-        self.server_info_from_builder(predicate(ServerInfoParamsBuilder::default())).await
+    pub async fn server_info<P>(&self, predicate: P) -> Result<ServerInfo, failure::Error> where P: FnOnce(ServerInfoParamsBuilder) -> ServerInfoParamsBuilder  {
+        self.server_info_from_builder(predicate(ServerInfoParamsBuilder::default()).build()?).await
     }
 }
 
