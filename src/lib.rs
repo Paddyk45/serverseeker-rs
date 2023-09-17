@@ -11,11 +11,9 @@ const API_URL: &str = "https://api.serverseeker.net";
 /// A response from the ServerSeeker API
 #[derive(Debug, Deserialize)]
 #[serde(untagged)]
-enum APIResponse {
-    APIError(APIError),
-    WhereisData(WhereisData),
-    ServersData(ServersData),
-    ServerInfoInfo(ServerInfoInfo),
+enum APIResponse<T> {
+    Error(APIError),
+    Data(T),
 }
 
 impl ServerSeekerClient {
@@ -40,10 +38,10 @@ impl ServerSeekerClient {
             .header("Content-Type", "application/json")
             .body(body)
             .send().await?;
-        let data: APIResponse = serde_json::from_str(&res.text().await?)?;
+        let data: APIResponse<WhereisData> = serde_json::from_str(&res.text().await?)?;
         match data { 
-            APIResponse::WhereisData(d) => Ok(d.data),
-            APIResponse::APIError(e) => Err(failure::err_msg(e.error)),
+            APIResponse::Data(d) => Ok(d.data),
+            APIResponse::Error(e) => Err(failure::err_msg(e.error)),
             _ => Err(failure::err_msg("An unknown error occured"))
         }
     }
@@ -62,10 +60,10 @@ impl ServerSeekerClient {
             .header("Content-Type", "application/json")
             .body(body)
             .send().await?;
-        let data: APIResponse = serde_json::from_str(&res.text().await?)?;
+        let data: APIResponse<ServersData> = serde_json::from_str(&res.text().await?)?;
         match data {
-            APIResponse::ServersData(d) => Ok(d.data),
-            APIResponse::APIError(e) => Err(failure::err_msg(e.error)),
+            APIResponse::Data(d) => Ok(d.data),
+            APIResponse::Error(e) => Err(failure::err_msg(e.error)),
             _ => Ok(Vec::new())
         }
     }
@@ -84,10 +82,10 @@ impl ServerSeekerClient {
             .header("Content-Type", "application/json")
             .body(body)
             .send().await?;
-        let info: APIResponse = serde_json::from_str(&res.text().await?)?;
+        let info: APIResponse<ServerInfoInfo> = serde_json::from_str(&res.text().await?)?;
         match info {
-            APIResponse::ServerInfoInfo(info) => Ok(info),
-            APIResponse::APIError(e) => Err(failure::err_msg(e.error)),
+            APIResponse::Data(info) => Ok(info),
+            APIResponse::Error(e) => Err(failure::err_msg(e.error)),
             _ => Err(failure::err_msg("An unknown error occured"))
         }
     }
