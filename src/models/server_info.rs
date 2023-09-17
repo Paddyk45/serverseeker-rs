@@ -13,7 +13,7 @@ pub struct ServerInfoParams {
     pub ip: String,
 
     /// The port of the server (default=25565)
-    pub port: Option<u16>
+    pub port: Option<u16>,
 }
 
 /// The information about the server
@@ -41,7 +41,7 @@ pub struct ServerInfoInfo {
     pub version: String,
 
     /// An array of when which players were seen on the server. Limited to 1000
-    pub players: Vec<ServerInfoPlayer>
+    pub players: Vec<ServerInfoPlayer>,
 }
 
 /// A player that was seen on a server
@@ -54,5 +54,5 @@ pub struct ServerInfoPlayer {
     pub name: String,
 
     /// The uuid of the player
-    pub uuid: String
+    pub uuid: String,
 }

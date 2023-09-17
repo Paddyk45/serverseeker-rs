@@ -4,7 +4,7 @@ use serde::{Deserialize, Serialize, Serializer};
 #[derive(Clone)]
 pub enum MaxOnlinePlayers {
     Num(u16),
-    Inf
+    Inf,
 }
 
 impl Serialize for MaxOnlinePlayers {
@@ -26,7 +26,7 @@ pub enum ServerSoftware {
     Vanilla,
     Paper,
     Spigot,
-    Bukkit
+    Bukkit,
 }
 
 /// The search parameters
@@ -70,7 +70,7 @@ pub(crate) struct ServersParams {
     pub country_code: Option<String>,
 
     /// The AS number of the server. You can get it easily from ipinfo. See [here](https://en.wikipedia.org/wiki/Autonomous_system_(Internet))
-    pub asn: Option<i16>
+    pub asn: Option<i16>,
 }
 
 /// A server in the results
@@ -104,5 +104,5 @@ pub struct ServersServer {
 /// The data array from the response
 #[derive(Deserialize, Debug)]
 pub(crate) struct ServersData {
-    pub data: Vec<ServersServer>
+    pub data: Vec<ServersServer>,
 }

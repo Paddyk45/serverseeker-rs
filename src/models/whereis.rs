@@ -12,7 +12,7 @@ pub(crate) struct WhereisParams {
     pub name: Option<String>,
 
     /// The uuid of the player you want to find
-    pub uuid: Option<String>
+    pub uuid: Option<String>,
 }
 
 /// A server in the results
@@ -27,13 +27,13 @@ pub struct WhereisServer {
     /// The ip:port of the server
     pub server: String,
 
-    /// The uuid of the player 
-    pub uuid: String
+    /// The uuid of the player
+    pub uuid: String,
 }
 
 /// The data array from the response
 #[derive(Deserialize, Debug)]
 pub(crate) struct WhereisData {
     /// An array of servers the player was seen on. Limited to 1000
-    pub data: Vec<WhereisServer>
+    pub data: Vec<WhereisServer>,
 }

@@ -1,9 +1,9 @@
+mod etc;
+mod server_info;
 mod servers;
 mod whereis;
-mod server_info;
-mod etc;
 
+pub use etc::*;
+pub use server_info::*;
 pub use servers::*;
 pub use whereis::*;
-pub use server_info::*;
-pub use etc::*;
