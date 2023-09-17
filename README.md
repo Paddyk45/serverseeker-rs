@@ -19,7 +19,7 @@ use serverseeker::ServerSeekerClient;
 async fn main() {
     // Initialize a ServerSeekerClient with your API key
     // How to get your API key: https://github.com/DAMcraft/ServerSeekerAPI-docs
-    let ss = ServerSeekerClient::new("YOUR_API_KEY".to_string()).unwrap();
+    let ss = ServerSeekerClient::new("YOUR_API_KEY".to_string());
     // Get a list of cracked servers
     let servers = ss.servers(|f| f.cracked(true)).await.unwrap();
     // Print the IP of every server

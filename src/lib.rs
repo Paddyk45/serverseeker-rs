@@ -17,9 +17,9 @@ enum APIResponse<T> {
 }
 
 impl ServerSeekerClient {
-    pub fn new(api_key: String) -> Result<Self, Error> {
+    pub fn new(api_key: String) -> Self {
         let client = reqwest::Client::new();
-        Ok(ServerSeekerClient {client, api_key})
+        ServerSeekerClient {client, api_key}
     }
 }
 
