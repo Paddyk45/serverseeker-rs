@@ -10,7 +10,7 @@ Also, I'm not the best Rust coder, so the code is probably bad :/
 Example:
 ```rust
 // [dependencies]
-// serverseeker = "^0.2"
+// serverseeker = "^0.3"
 // tokio = { version = "1.28.2", features = ["rt-multi-thread", "macros"] }
 
 use serverseeker::ServerSeekerClient;
