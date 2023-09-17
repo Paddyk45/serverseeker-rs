@@ -4,6 +4,9 @@
 # serverseeker-rs
 A Rust wrapper for DAMcrafts ServerSeeker API
 
+# What is ServerSeeker?
+ServerSeeker is a bot that scans the entire internet for minecraft servers and collects data from the [Server List Ping](https://wiki.vg/Server_List_Ping) (SLP). It also checks if the server is cracked
+
 This project is currently work-in-progress!
 Also, I'm not the best Rust coder, so the code is probably bad :/
 
