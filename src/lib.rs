@@ -6,7 +6,7 @@ pub use models::{
     ServerSeekerClient,
     WhereisBuilder, WhereisBuilderError, WhereisServer,
     ServerInfoBuilder, ServerInfoBuilderError, ServerInfoPlayer,
-    ServersBuilder, ServersBuilderError, ServerSoftware
+    ServersBuilder, ServersBuilderError, ServerSoftware, MaxOnlinePlayers
 };
 use models::*;
 
