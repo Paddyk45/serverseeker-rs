@@ -70,7 +70,7 @@ impl ServerSeekerClient {
     }
 
     /// Get information about a server
-    pub async fn server_info<F>(&self, builder: &ServersBuilder) -> Result<ServerInfoInfo, failure::Error>
+    pub async fn server_info(&self, builder: &ServerInfoBuilder) -> Result<ServerInfoInfo, failure::Error>
     {
         let url = format!("{API_URL}/server_info");
         let mut params = builder.build()?;
