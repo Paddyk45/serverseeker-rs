@@ -18,7 +18,6 @@ async fn main() {
     // Fetch results
     let info = ss.server_info(&mut builder).await.unwrap();
 
-    
     // Print the server info
     dbg!(info);
 }

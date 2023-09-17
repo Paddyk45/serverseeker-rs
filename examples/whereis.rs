@@ -16,7 +16,5 @@ async fn main() {
     let servers = ss.whereis(&mut builder).await.unwrap();
 
     // Print the IP of every server
-    for server in servers {
-        dbg!(server);
-    }
+    dbg!(servers);
 }
