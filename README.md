@@ -11,9 +11,9 @@ Example:
 ```rust
 // [dependencies]
 // serverseeker = "^0.3"
-// tokio = { version = "1.28.2", features = ["rt-multi-thread", "macros"] }
+// tokio = { version = "^1.28.2", features = ["rt-multi-thread", "macros"] }
 
-use serverseeker::ServerSeekerClient;
+use serverseeker::*;
 
 #[tokio::main]
 async fn main() {
