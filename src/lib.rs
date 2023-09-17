@@ -20,7 +20,8 @@ enum APIResponse {
 
 impl ServerSeekerClient {
     pub fn new(api_key: String) -> Result<Self, Error> {
-        Ok(ServerSeekerClient{api_key})
+        let client = reqwest::Client::new();
+        Ok(ServerSeekerClient {client, api_key})
     }
 }
 
@@ -35,12 +36,12 @@ impl ServerSeekerClient {
         let f_builder = f(builder);
         let params = f_builder.build();
         let body = serde_json::to_string(&params).unwrap();
-        let res = minreq::post(url)
-            .with_header("Content-Type", "application/json")
-            .with_body(body)
-            .send()?;
-        let data: APIResponse = serde_json::from_str(res.as_str().unwrap())?;
-        match data {
+        let res = self.client.post(url)
+            .header("Content-Type", "application/json")
+            .body(body)
+            .send().await?;
+        let data: APIResponse = serde_json::from_str(&res.text().await?)?;
+        match data { 
             APIResponse::WhereisData(d) => Ok(d.data),
             APIResponse::APIError(e) => Err(failure::err_msg(e.error)),
             _ => Err(failure::err_msg("An unknown error occured"))
@@ -49,7 +50,7 @@ impl ServerSeekerClient {
 
     /// Get a list of random servers, optionally with criteria
     pub async fn servers<F>(&self, f: F) -> Result<Vec<ServersServer>, failure::Error>
-    where F: FnOnce(ServersBuilder) -> ServersBuilder
+    where F: Fn(ServersBuilder) -> ServersBuilder
     {
         let url = format!("{API_URL}/servers");
         let mut builder = ServersBuilder::new();
@@ -57,11 +58,11 @@ impl ServerSeekerClient {
         let f_builder = f(builder);
         let params = f_builder.build();
         let body = serde_json::to_string(&params).unwrap();
-        let res = minreq::post(url)
-            .with_header("Content-Type", "application/json")
-            .with_body(body)
-            .send()?;
-        let data: APIResponse = serde_json::from_str(res.as_str().unwrap())?;
+        let res = self.client.post(url)
+            .header("Content-Type", "application/json")
+            .body(body)
+            .send().await?;
+        let data: APIResponse = serde_json::from_str(&res.text().await?)?;
         match data {
             APIResponse::ServersData(d) => Ok(d.data),
             APIResponse::APIError(e) => Err(failure::err_msg(e.error)),
@@ -79,11 +80,11 @@ impl ServerSeekerClient {
         let f_builder = f(builder);
         let params = f_builder.build();
         let body = serde_json::to_string(&params).unwrap();
-        let res = minreq::post(url)
-            .with_header("Content-Type", "application/json")
-            .with_body(body)
-            .send()?;
-        let info: APIResponse = serde_json::from_str(res.as_str().unwrap())?;
+        let res = self.client.post(url)
+            .header("Content-Type", "application/json")
+            .body(body)
+            .send().await?;
+        let info: APIResponse = serde_json::from_str(&res.text().await?)?;
         match info {
             APIResponse::ServerInfoInfo(info) => Ok(info),
             APIResponse::APIError(e) => Err(failure::err_msg(e.error)),
