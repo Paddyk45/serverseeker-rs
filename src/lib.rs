@@ -25,7 +25,10 @@ enum APIResponse<T> {
 impl ServerSeekerClient {
     pub fn new<T: ToString>(api_key: T) -> Self {
         let client = reqwest::Client::new();
-        ServerSeekerClient { client: client, api_key: api_key.to_string() }
+        ServerSeekerClient {
+            client: client,
+            api_key: api_key.to_string(),
+        }
     }
 }
 
