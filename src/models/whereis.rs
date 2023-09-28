@@ -5,10 +5,6 @@ use serde::{Deserialize, Serialize, Serializer};
 #[derive(Serialize, Builder, Default)]
 #[builder(name = "WhereisBuilder", public, setter(strip_option), default)]
 pub(crate) struct WhereisParams<T: Into<String> + Default> {
-    /// Your api_key
-    #[builder(setter(skip))]
-    pub api_key: Option<String>,
-
     /// The name of the player you want to find
     pub name: Option<T>,
 
@@ -46,7 +42,6 @@ impl ServerSeekerClient {
         builder: &WhereisBuilder<T>,
     ) -> anyhow::Result<Vec<WhereisServer>> {
         let mut params = builder.build()?;
-        params.api_key = Some(self.api_key.clone());
         Ok(self
             .request::<WhereisData, _, _>("/whereis", params)
             .await?

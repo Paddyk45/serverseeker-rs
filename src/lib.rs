@@ -5,8 +5,8 @@ mod models;
 use models::*;
 pub use models::{
     MaxOnlinePlayers, ServerInfoBuilder, ServerInfoBuilderError, ServerInfoPlayer,
-    ServerSeekerClient, ServerSoftware, ServersBuilder, ServersBuilderError, WhereisBuilder,
-    WhereisBuilderError, WhereisServer,
+    ServerSeekerClient, ServerSeekerError, ServerSoftware, ServersBuilder, ServersBuilderError,
+    WhereisBuilder, WhereisBuilderError, WhereisServer,
 };
 
 use derive_builder::Builder;

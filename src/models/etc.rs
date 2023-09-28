@@ -2,6 +2,8 @@ use crate::models::*;
 use crate::models::{ServersServer, WhereisData};
 use anyhow::{bail, Error};
 use derive_builder::Builder;
+use reqwest::header::{HeaderMap, AUTHORIZATION};
+use reqwest::ClientBuilder;
 use serde::de::DeserializeOwned;
 use serde::{Deserialize, Serialize, Serializer};
 use std::any::{type_name, TypeId};
@@ -18,10 +20,41 @@ impl ServerSeekerClient {
     pub const API_URL: &'static str = "https://api.serverseeker.net";
 
     pub fn new<T: ToString>(api_key: T) -> Self {
-        let client = reqwest::Client::new();
+        let mut client_builder = ClientBuilder::new();
+        let mut hm = HeaderMap::new();
+        hm.append(AUTHORIZATION, api_key.to_string().parse().unwrap());
+        let client = client_builder.default_headers(hm).build().unwrap();
+
         ServerSeekerClient {
             client,
             api_key: api_key.to_string(),
+        }
+    }
+
+    /// Create a new ServerSeekerClient and check if the api key is valid
+    pub async fn new_checked<T: ToString>(
+        api_key: T,
+    ) -> Result<ServerSeekerClient, ServerSeekerError> {
+        let res = reqwest::Client::new()
+            .post(format!("{}{}", Self::API_URL, "/user_info"))
+            .header("Authorization", api_key.to_string())
+            .send()
+            .await
+            .expect("Failed to send request");
+        match res.status().as_u16() {
+            200 => {
+                let mut client_builder = ClientBuilder::new();
+                let mut hm = HeaderMap::new();
+                hm.append(AUTHORIZATION, api_key.to_string().parse().unwrap());
+                let client = client_builder.default_headers(hm).build().unwrap();
+
+                Ok(ServerSeekerClient {
+                    client,
+                    api_key: api_key.to_string(),
+                })
+            }
+            400 | 401 => Err(ServerSeekerError::InvalidApiKey),
+            _ => unreachable!("That shouldn't have happened"),
         }
     }
 
@@ -51,13 +84,17 @@ impl ServerSeekerClient {
 #[derive(Debug, Error, Deserialize)]
 #[serde(untagged)]
 enum APIResponse<T> {
-    Error(APIError),
+    Error(ServerSeekerError),
     Data(T),
 }
 
-/// An error
-#[derive(Deserialize, Error, Debug)]
-pub(crate) enum APIError {
-    #[error("API returned error: {0}")]
-    Error(String),
+#[derive(Error, Debug, Deserialize)]
+#[serde(untagged)]
+pub enum ServerSeekerError {
+    // Only for ServerSeekerClient::new_checked()
+    #[error("Inavlid api_key")]
+    InvalidApiKey,
+
+    #[error("API returned error: {error:0}")]
+    APIError { error: String },
 }

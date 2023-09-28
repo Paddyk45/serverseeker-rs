@@ -34,10 +34,6 @@ pub enum ServerSoftware {
 #[derive(Serialize, Builder, Clone, Default)]
 #[builder(name = "ServersBuilder", public, setter(strip_option), default)]
 pub(crate) struct ServersParams<T: Into<String> + Default> {
-    /// Your api_key
-    #[builder(setter(skip))]
-    pub(crate) api_key: Option<String>,
-
     /// The amount of online players the server should have
     #[serde(rename = "online_players")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -115,7 +111,6 @@ impl ServerSeekerClient {
         builder: &ServersBuilder<T>,
     ) -> anyhow::Result<Vec<ServersServer>> {
         let mut params = builder.build()?;
-        params.api_key = Some(self.api_key.clone());
         Ok(self
             .request::<ServersData, _, _>("/servers", params)
             .await?

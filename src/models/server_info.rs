@@ -1,15 +1,12 @@
 use crate::ServerSeekerClient;
 use derive_builder::Builder;
 use serde::{Deserialize, Serialize, Serializer};
+use std::ops::{Range, RangeFrom};
 
 /// The server ip/port
 #[derive(Serialize, Builder, Default)]
 #[builder(name = "ServerInfoBuilder", public, setter(strip_option), default)]
 pub struct ServerInfoParams<T: Into<String> + Default> {
-    /// Your api_key
-    #[builder(setter(skip))]
-    pub api_key: Option<String>,
-
     /// The IP of the server
     pub ip: T,
 
@@ -65,7 +62,6 @@ impl ServerSeekerClient {
         builder: &ServerInfoBuilder<T>,
     ) -> anyhow::Result<ServerInfoInfo> {
         let mut params = builder.build()?;
-        params.api_key = Some(self.api_key.clone());
         Ok(self
             .request::<ServerInfoInfo, _, _>("/server_info", params)
             .await?)
