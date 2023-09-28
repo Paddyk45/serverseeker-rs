@@ -23,7 +23,7 @@ use serverseeker::*;
 async fn main() {
     // Initialize a ServerSeekerClient with your API key
     // How to get your API key: https://github.com/DAMcraft/ServerSeekerAPI-docs
-    let ss = ServerSeekerClient::new("YOUR_API_KEY".to_string());
+    let ss = ServerSeekerClient::new("YOUR_API_KEY");
 
     // Initialize the builder
     let mut builder = ServersBuilder::default();
