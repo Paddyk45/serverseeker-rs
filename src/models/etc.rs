@@ -75,7 +75,7 @@ impl ServerSeekerClient {
         match res {
             APIResponse::Data(d) => Ok(d),
             APIResponse::Error(e) => anyhow::bail!(e),
-            _ => bail!("An unknown error occured"),
+            _ => bail!("An unknown error occurred"),
         }
     }
 }
@@ -92,7 +92,7 @@ enum APIResponse<T> {
 #[serde(untagged)]
 pub enum ServerSeekerError {
     // Only for ServerSeekerClient::new_checked()
-    #[error("Inavlid api_key")]
+    #[error("Invalid api_key")]
     InvalidApiKey,
 
     #[error("API returned error: {error:0}")]
