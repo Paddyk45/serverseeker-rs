@@ -1,13 +1,12 @@
-use std::any::{type_name, TypeId};
-use std::fmt::format;
-use anyhow::{bail, Error};
-use derive_builder::Builder;
-use serde::{Deserialize, Serialize, Serializer};
-use serde::de::DeserializeOwned;
-use thiserror::Error;
 use crate::models::*;
 use crate::models::{ServersServer, WhereisData};
-
+use anyhow::{bail, Error};
+use derive_builder::Builder;
+use serde::de::DeserializeOwned;
+use serde::{Deserialize, Serialize, Serializer};
+use std::any::{type_name, TypeId};
+use std::fmt::format;
+use thiserror::Error;
 
 /// A ServerSeeker client which stores the api key
 pub struct ServerSeekerClient {
@@ -26,7 +25,11 @@ impl ServerSeekerClient {
         }
     }
 
-    pub(crate) async fn request<T: DeserializeOwned, P: Serialize, E: ToString>(&self, endpoint: E, params: P) -> anyhow::Result<T> {
+    pub(crate) async fn request<T: DeserializeOwned, P: Serialize, E: ToString>(
+        &self,
+        endpoint: E,
+        params: P,
+    ) -> anyhow::Result<T> {
         let res: APIResponse<T> = self
             .client
             .post(format!("{}{}", Self::API_URL, endpoint.to_string()))
@@ -56,5 +59,5 @@ enum APIResponse<T> {
 #[derive(Deserialize, Error, Debug)]
 pub(crate) enum APIError {
     #[error("API returned error: {0}")]
-    Error(String)
+    Error(String),
 }

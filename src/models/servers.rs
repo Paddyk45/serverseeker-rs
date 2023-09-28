@@ -1,6 +1,6 @@
+use crate::ServerSeekerClient;
 use derive_builder::Builder;
 use serde::{Deserialize, Serialize, Serializer};
-use crate::ServerSeekerClient;
 
 #[derive(Clone)]
 pub enum MaxOnlinePlayers {
@@ -116,6 +116,9 @@ impl ServerSeekerClient {
     ) -> anyhow::Result<Vec<ServersServer>> {
         let mut params = builder.build()?;
         params.api_key = Some(self.api_key.clone());
-        Ok(self.request::<ServersData, _, _>("/servers", params).await?.data)
+        Ok(self
+            .request::<ServersData, _, _>("/servers", params)
+            .await?
+            .data)
     }
 }

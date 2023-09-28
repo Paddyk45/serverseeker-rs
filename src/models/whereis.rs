@@ -1,6 +1,6 @@
+use crate::ServerSeekerClient;
 use derive_builder::Builder;
 use serde::{Deserialize, Serialize, Serializer};
-use crate::ServerSeekerClient;
 
 #[derive(Serialize, Builder, Default)]
 #[builder(name = "WhereisBuilder", public, setter(strip_option), default)]
@@ -47,6 +47,9 @@ impl ServerSeekerClient {
     ) -> anyhow::Result<Vec<WhereisServer>> {
         let mut params = builder.build()?;
         params.api_key = Some(self.api_key.clone());
-        Ok(self.request::<WhereisData, _, _>("/whereis", params).await?.data)
+        Ok(self
+            .request::<WhereisData, _, _>("/whereis", params)
+            .await?
+            .data)
     }
 }

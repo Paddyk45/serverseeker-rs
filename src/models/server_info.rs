@@ -1,6 +1,6 @@
+use crate::ServerSeekerClient;
 use derive_builder::Builder;
 use serde::{Deserialize, Serialize, Serializer};
-use crate::ServerSeekerClient;
 
 /// The server ip/port
 #[derive(Serialize, Builder, Default)]
@@ -66,6 +66,8 @@ impl ServerSeekerClient {
     ) -> anyhow::Result<ServerInfoInfo> {
         let mut params = builder.build()?;
         params.api_key = Some(self.api_key.clone());
-        Ok(self.request::<ServerInfoInfo, _, _>("/server_info", params).await?)
+        Ok(self
+            .request::<ServerInfoInfo, _, _>("/server_info", params)
+            .await?)
     }
 }
