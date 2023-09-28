@@ -1,5 +1,6 @@
 use derive_builder::Builder;
 use serde::{Deserialize, Serialize, Serializer};
+use crate::ServerSeekerClient;
 
 /// The server ip/port
 #[derive(Serialize, Builder, Default)]
@@ -55,4 +56,16 @@ pub struct ServerInfoPlayer {
 
     /// The uuid of the player
     pub uuid: String,
+}
+
+impl ServerSeekerClient {
+    /// Get information about a server
+    pub async fn server_info<T: Into<String> + Default + Clone + Serialize>(
+        &self,
+        builder: &ServerInfoBuilder<T>,
+    ) -> anyhow::Result<ServerInfoInfo> {
+        let mut params = builder.build()?;
+        params.api_key = Some(self.api_key.clone());
+        Ok(self.request::<ServerInfoInfo, _, _>("/server_info", params).await?)
+    }
 }

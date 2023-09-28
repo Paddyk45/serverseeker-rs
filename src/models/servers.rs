@@ -1,5 +1,6 @@
 use derive_builder::Builder;
 use serde::{Deserialize, Serialize, Serializer};
+use crate::ServerSeekerClient;
 
 #[derive(Clone)]
 pub enum MaxOnlinePlayers {
@@ -105,4 +106,16 @@ pub struct ServersServer {
 #[derive(Deserialize, Debug)]
 pub(crate) struct ServersData {
     pub data: Vec<ServersServer>,
+}
+
+impl ServerSeekerClient {
+    /// Get a list of random servers, optionally with criteria
+    pub async fn servers<T: Into<String> + Default + Clone + Serialize>(
+        &self,
+        builder: &ServersBuilder<T>,
+    ) -> anyhow::Result<Vec<ServersServer>> {
+        let mut params = builder.build()?;
+        params.api_key = Some(self.api_key.clone());
+        Ok(self.request::<ServersData, _, _>("/servers", params).await?.data)
+    }
 }

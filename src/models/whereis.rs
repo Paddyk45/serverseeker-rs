@@ -1,5 +1,6 @@
 use derive_builder::Builder;
 use serde::{Deserialize, Serialize, Serializer};
+use crate::ServerSeekerClient;
 
 #[derive(Serialize, Builder, Default)]
 #[builder(name = "WhereisBuilder", public, setter(strip_option), default)]
@@ -36,4 +37,16 @@ pub struct WhereisServer {
 pub(crate) struct WhereisData {
     /// An array of servers the player was seen on. Limited to 1000
     pub data: Vec<WhereisServer>,
+}
+
+impl ServerSeekerClient {
+    /// Get all servers a player was on during a scan
+    pub async fn whereis<T: Into<String> + Default + Clone + Serialize>(
+        &self,
+        builder: &WhereisBuilder<T>,
+    ) -> anyhow::Result<Vec<WhereisServer>> {
+        let mut params = builder.build()?;
+        params.api_key = Some(self.api_key.clone());
+        Ok(self.request::<WhereisData, _, _>("/whereis", params).await?.data)
+    }
 }
