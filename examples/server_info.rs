@@ -16,7 +16,7 @@ async fn main() {
     builder.port(25565);
 
     // Fetch results
-    let info = ss.server_info(&mut builder).await.unwrap();
+    let info = ss.server_info(&builder).await.unwrap();
 
     // Print the server info
     dbg!(info);

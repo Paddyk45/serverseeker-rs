@@ -13,7 +13,7 @@ async fn main() {
     builder.name("DAMcraft");
 
     // Fetch results
-    let servers = ss.whereis(&mut builder).await.unwrap();
+    let servers = ss.whereis(&builder).await.unwrap();
 
     // Print the IP of every server
     dbg!(servers);

@@ -31,7 +31,7 @@ async fn main() {
     builder.country_code("DE");
 
     // Fetch results
-    let servers = ss.servers(&mut b).await.unwrap();
+    let servers = ss.servers(&b).await.unwrap();
 
     // Print the IP of every server
     for server in servers {

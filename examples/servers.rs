@@ -19,7 +19,7 @@ async fn main() {
     builder.description("SMP");
 
     // Fetch results
-    let servers = ss.servers(&mut builder).await.unwrap();
+    let servers = ss.servers(&builder).await.unwrap();
 
     // Print the IP of every server
     dbg!(servers);
