@@ -74,7 +74,7 @@ impl ServerSeekerClient {
             .await?;
         match res {
             APIResponse::Data(d) => Ok(d),
-            APIResponse::Error(e) => anyhow::bail!(e),
+            APIResponse::Error(e) => bail!(e),
             _ => bail!("An unknown error occurred"),
         }
     }
