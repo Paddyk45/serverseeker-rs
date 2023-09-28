@@ -4,13 +4,13 @@ use serde::{Deserialize, Serialize, Serializer};
 /// The server ip/port
 #[derive(Serialize, Builder, Default)]
 #[builder(name = "ServerInfoBuilder", public, setter(strip_option), default)]
-pub struct ServerInfoParams {
+pub struct ServerInfoParams<T: Into<String> + Default> {
     /// Your api_key
     #[builder(setter(skip))]
     pub api_key: Option<String>,
 
     /// The IP of the server
-    pub ip: String,
+    pub ip: T,
 
     /// The port of the server (default=25565)
     pub port: Option<u16>,

@@ -13,10 +13,10 @@ async fn main() {
     builder.cracked(true);
 
     // Only german servers
-    builder.country_code("DE".to_string());
+    builder.country_code("DE");
 
     // Only servers that have "SMP" in their MOTD
-    builder.description("SMP".to_string());
+    builder.description("SMP");
 
     // Fetch results
     let servers = ss.servers(&mut builder).await.unwrap();

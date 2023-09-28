@@ -10,7 +10,7 @@ async fn main() {
     let mut builder = ServerInfoBuilder::default();
 
     // Set the ip to 45.135.201.120
-    builder.ip("45.135.201.120".to_string());
+    builder.ip("45.135.201.120");
 
     // Set the port to 25565 (not required if the server port is 25565)
     builder.port(25565);

@@ -32,7 +32,7 @@ pub enum ServerSoftware {
 /// The search parameters
 #[derive(Serialize, Builder, Clone, Default)]
 #[builder(name = "ServersBuilder", public, setter(strip_option), default)]
-pub(crate) struct ServersParams {
+pub(crate) struct ServersParams<T: Into<String> + Default> {
     /// Your api_key
     #[builder(setter(skip))]
     pub(crate) api_key: Option<String>,
@@ -54,7 +54,7 @@ pub(crate) struct ServersParams {
     pub cracked: Option<bool>,
 
     /// What the description aka MOTD of the servers should contain
-    pub description: Option<String>,
+    pub description: Option<T>,
 
     /// The [protocol version](https://wiki.vg/Protocol_version_numbers) of the server
     pub protocol: Option<i32>,
@@ -67,7 +67,7 @@ pub(crate) struct ServersParams {
     pub software: Option<ServerSoftware>,
 
     /// The country code of the server. See [here](https://en.wikipedia.org/wiki/ISO_3166-1_alpha-2)
-    pub country_code: Option<String>,
+    pub country_code: Option<T>,
 
     /// The AS number of the server. You can get it easily from ipinfo. See [here](https://en.wikipedia.org/wiki/Autonomous_system_(Internet))
     pub asn: Option<i16>,

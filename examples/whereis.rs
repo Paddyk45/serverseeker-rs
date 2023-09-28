@@ -10,7 +10,7 @@ async fn main() {
     let mut builder = WhereisBuilder::default();
 
     // Search player "DAMcraft"
-    builder.name("DAMcraft".to_string());
+    builder.name("Yes");
 
     // Fetch results
     let servers = ss.whereis(&mut builder).await.unwrap();

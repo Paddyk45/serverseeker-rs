@@ -10,7 +10,7 @@ pub use models::{
 };
 
 use derive_builder::Builder;
-use serde::Deserialize;
+use serde::{Deserialize, Serialize};
 
 const API_URL: &str = "https://api.serverseeker.net";
 
@@ -23,17 +23,17 @@ enum APIResponse<T> {
 }
 
 impl ServerSeekerClient {
-    pub fn new(api_key: String) -> Self {
+    pub fn new<T: ToString>(api_key: T) -> Self {
         let client = reqwest::Client::new();
-        ServerSeekerClient { client, api_key }
+        ServerSeekerClient { client: client, api_key: api_key.to_string() }
     }
 }
 
 impl ServerSeekerClient {
     /// Get all servers a player was on during a scan
-    pub async fn whereis(
+    pub async fn whereis<T: Into<String> + Default + Clone + Serialize>(
         &self,
-        builder: &WhereisBuilder,
+        builder: &WhereisBuilder<T>,
     ) -> Result<Vec<WhereisServer>, failure::Error> {
         let url = format!("{API_URL}/whereis");
         let mut params = builder.build()?;
@@ -55,9 +55,9 @@ impl ServerSeekerClient {
     }
 
     /// Get a list of random servers, optionally with criteria
-    pub async fn servers(
+    pub async fn servers<T: Into<String> + Default + Clone + Serialize>(
         &self,
-        builder: &ServersBuilder,
+        builder: &ServersBuilder<T>,
     ) -> Result<Vec<ServersServer>, failure::Error> {
         let url = format!("{API_URL}/servers");
         let mut params = builder.build()?;
@@ -79,9 +79,9 @@ impl ServerSeekerClient {
     }
 
     /// Get information about a server
-    pub async fn server_info(
+    pub async fn server_info<T: Into<String> + Default + Clone + Serialize>(
         &self,
-        builder: &ServerInfoBuilder,
+        builder: &ServerInfoBuilder<T>,
     ) -> Result<ServerInfoInfo, failure::Error> {
         let url = format!("{API_URL}/server_info");
         let mut params = builder.build()?;

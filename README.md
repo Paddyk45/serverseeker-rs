@@ -28,7 +28,7 @@ async fn main() {
     // Initialize the builder
     let mut builder = ServersBuilder::default();
     b.cracked(true);
-    b.country_code("DE".to_string());
+    b.country_code("DE");
 
     // Fetch results
     let servers = ss.servers(&mut b).await.unwrap();

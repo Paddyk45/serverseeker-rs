@@ -3,16 +3,16 @@ use serde::{Deserialize, Serialize, Serializer};
 
 #[derive(Serialize, Builder, Default)]
 #[builder(name = "WhereisBuilder", public, setter(strip_option), default)]
-pub(crate) struct WhereisParams {
+pub(crate) struct WhereisParams<T: Into<String> + Default> {
     /// Your api_key
     #[builder(setter(skip))]
     pub api_key: Option<String>,
 
     /// The name of the player you want to find
-    pub name: Option<String>,
+    pub name: Option<T>,
 
     /// The uuid of the player you want to find
-    pub uuid: Option<String>,
+    pub uuid: Option<T>,
 }
 
 /// A server in the results
