@@ -1,18 +1,26 @@
+#![no_std]
+#![cfg_attr(feature = "std", feature(std))]
+
+#[cfg(feature = "std")]
+use std::{any::{type_name, TypeId}, fmt::format};
+#[cfg(not(feature = "std"))]
+use core::{any::{type_name, TypeId}, fmt::format};
+
 use crate::models::*;
 use crate::models::{ServersServer, WhereisData};
-use anyhow::{bail, Error};
 use derive_builder::Builder;
-use reqwest::header::{HeaderMap, AUTHORIZATION};
-use reqwest::ClientBuilder;
 use serde::de::DeserializeOwned;
 use serde::{Deserialize, Serialize, Serializer};
-use std::any::{type_name, TypeId};
-use std::fmt::format;
 use thiserror::Error;
+
+#[cfg(feature = "std")]
+use reqwest::{header::{HeaderMap, AUTHORIZATION}, ClientBuilder};
+#[cfg(not(feature = "std"))]
+use http_client::{header::{HeaderMap, AUTHORIZATION}, ClientBuilder};
 
 /// A ServerSeeker client which stores the api key
 pub struct ServerSeekerClient {
-    pub client: reqwest::Client,
+    pub client: Client,
     pub api_key: String,
 }
 
@@ -30,12 +38,6 @@ impl ServerSeekerClient {
             api_key: api_key.to_string(),
         }
     }
-
-    /// Create a new ServerSeekerClient and check if the api key is valid
-    pub async fn new_checked<T: ToString>(
-        api_key: T,
-    ) -> Result<ServerSeekerClient, ServerSeekerError> {
-        let res = reqwest::Client::new()
             .post(format!("{}{}", Self::API_URL, "/user_info"))
             .header("Authorization", api_key.to_string())
             .send()
