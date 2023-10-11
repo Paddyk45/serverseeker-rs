@@ -1,5 +1,14 @@
-#![allow(unused)]
+#![no_std]
+#![cfg_attr(feature = "std", feature(std))]
+
+#[cfg(feature = "std")]
 use std::{io::Error, vec};
+
+#[cfg(not(feature = "std"))]
+use {
+    core::fmt::Error,
+    alloc::vec::Vec,
+};
 
 mod models;
 use models::*;
