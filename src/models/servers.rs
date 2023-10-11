@@ -1,3 +1,11 @@
+#![no_std]
+#![cfg_attr(feature = "std", feature(std))]
+
+#[cfg(feature = "std")]
+use std::vec::Vec;
+#[cfg(not(feature = "std"))]
+use alloc::vec::Vec;
+
 use crate::ServerSeekerClient;
 use derive_builder::Builder;
 use serde::{Deserialize, Serialize, Serializer};
@@ -109,7 +117,7 @@ impl ServerSeekerClient {
     pub async fn servers<T: Into<String> + Default + Clone + Serialize>(
         &self,
         builder: &ServersBuilder<T>,
-    ) -> anyhow::Result<Vec<ServersServer>> {
+    ) -> Result<Vec<ServersServer>, ServerSeekerError> {
         let mut params = builder.build()?;
         Ok(self
             .request::<ServersData, _, _>("/servers", params)
