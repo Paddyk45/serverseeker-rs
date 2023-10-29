@@ -32,7 +32,7 @@ pub enum ServerSoftware {
 
 /// The search parameters
 #[derive(Serialize, Builder, Clone, Default)]
-#[builder(name = "ServersBuilder", public, setter(strip_option))]
+#[builder(name = "ServersBuilder", public, setter(strip_option), default)]
 pub struct ServersParams {
     /// The amount of online players the server should have
     #[serde(rename = "online_players")]
