@@ -4,12 +4,14 @@ use serde::{Deserialize, Serialize, Serializer};
 
 #[derive(Serialize, Builder, Default)]
 #[builder(name = "WhereisBuilder", public, setter(strip_option), default)]
-pub(crate) struct WhereisParams<T: Into<String> + Default> {
+pub struct WhereisParams {
     /// The name of the player you want to find
-    pub name: Option<T>,
+    #[builder(setter(into))]
+    pub name: Option<String>,
 
     /// The uuid of the player you want to find
-    pub uuid: Option<T>,
+    #[builder(setter(into))]
+    pub uuid: Option<String>,
 }
 
 /// A server in the results
@@ -37,9 +39,9 @@ pub(crate) struct WhereisData {
 
 impl ServerSeekerClient {
     /// Get all servers a player was on during a scan
-    pub async fn whereis<T: Into<String> + Default + Clone + Serialize>(
+    pub async fn whereis(
         &self,
-        builder: &WhereisBuilder<T>,
+        builder: &WhereisBuilder,
     ) -> anyhow::Result<Vec<WhereisServer>> {
         let mut params = builder.build()?;
         Ok(self

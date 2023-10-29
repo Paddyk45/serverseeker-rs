@@ -32,8 +32,8 @@ pub enum ServerSoftware {
 
 /// The search parameters
 #[derive(Serialize, Builder, Clone, Default)]
-#[builder(name = "ServersBuilder", public, setter(strip_option), default)]
-pub(crate) struct ServersParams<T: Into<String> + Default> {
+#[builder(name = "ServersBuilder", public, setter(strip_option))]
+pub struct ServersParams {
     /// The amount of online players the server should have
     #[serde(rename = "online_players")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -51,7 +51,8 @@ pub(crate) struct ServersParams<T: Into<String> + Default> {
     pub cracked: Option<bool>,
 
     /// What the description aka MOTD of the servers should contain
-    pub description: Option<T>,
+    #[builder(setter(into))]
+    pub description: Option<String>,
 
     /// The [protocol version](https://wiki.vg/Protocol_version_numbers) of the server
     pub protocol: Option<i32>,
@@ -64,7 +65,8 @@ pub(crate) struct ServersParams<T: Into<String> + Default> {
     pub software: Option<ServerSoftware>,
 
     /// The country code of the server. See [here](https://en.wikipedia.org/wiki/ISO_3166-1_alpha-2)
-    pub country_code: Option<T>,
+    #[builder(setter(into))]
+    pub country_code: Option<String>,
 
     /// The AS number of the server. You can get it easily from ipinfo. See [here](https://en.wikipedia.org/wiki/Autonomous_system_(Internet))
     pub asn: Option<i16>,
@@ -106,9 +108,9 @@ pub(crate) struct ServersData {
 
 impl ServerSeekerClient {
     /// Get a list of random servers, optionally with criteria
-    pub async fn servers<T: Into<String> + Default + Clone + Serialize>(
+    pub async fn servers(
         &self,
-        builder: &ServersBuilder<T>,
+        builder: &ServersBuilder,
     ) -> anyhow::Result<Vec<ServersServer>> {
         let mut params = builder.build()?;
         Ok(self

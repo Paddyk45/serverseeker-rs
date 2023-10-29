@@ -6,9 +6,10 @@ use std::ops::{Range, RangeFrom};
 /// The server ip/port
 #[derive(Serialize, Builder, Default)]
 #[builder(name = "ServerInfoBuilder", public, setter(strip_option), default)]
-pub struct ServerInfoParams<T: Into<String> + Default> {
+pub struct ServerInfoParams {
     /// The IP of the server
-    pub ip: T,
+    #[builder(setter(into))]
+    pub ip: String,
 
     /// The port of the server (default=25565)
     pub port: Option<u16>,
@@ -57,9 +58,9 @@ pub struct ServerInfoPlayer {
 
 impl ServerSeekerClient {
     /// Get information about a server
-    pub async fn server_info<T: Into<String> + Default + Clone + Serialize>(
+    pub async fn server_info(
         &self,
-        builder: &ServerInfoBuilder<T>,
+        builder: &ServerInfoBuilder,
     ) -> anyhow::Result<ServerInfoInfo> {
         let mut params = builder.build()?;
         Ok(self

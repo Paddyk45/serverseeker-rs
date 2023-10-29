@@ -5,7 +5,7 @@ mod models;
 use models::*;
 pub use models::{
     MaxOnlinePlayers, ServerInfoBuilder, ServerInfoBuilderError, ServerInfoPlayer,
-    ServerSeekerClient, ServerSeekerError, ServerSoftware, ServersBuilder, ServersBuilderError,
+    ServerSeekerClient, ServerSeekerError, ServerSoftware, ServersBuilder, ServersBuilderError, ServersServer,
     WhereisBuilder, WhereisBuilderError, WhereisServer,
 };
 
