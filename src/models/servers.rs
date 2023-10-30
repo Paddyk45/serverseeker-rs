@@ -85,10 +85,10 @@ pub struct ServersServer {
     pub last_seen: i64,
 
     /// The maximum amount of players the server can hold
-    pub max_players: u32,
+    pub max_players: i64,
 
     /// The amount of players online during the last scan
-    pub online_players: u32,
+    pub online_players: i64,
 
     /// The [protocol version](https://wiki.vg/Protocol_version_numbers) of the server
     pub protocol: i64,
