@@ -70,6 +70,9 @@ pub struct ServersParams {
 
     /// The AS number of the server. You can get it easily from ipinfo. See [here](https://en.wikipedia.org/wiki/Autonomous_system_(Internet))
     pub asn: Option<i16>,
+
+    /// If Forge servers should be excluded
+    pub ignore_modded: Option<bool>
 }
 
 /// A server in the results

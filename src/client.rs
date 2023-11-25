@@ -1,5 +1,3 @@
-use crate::models::*;
-use crate::models::{ServersServer, WhereisData};
 use anyhow::{bail, Error};
 use derive_builder::Builder;
 use reqwest::header::{HeaderMap, AUTHORIZATION};
@@ -9,6 +7,8 @@ use serde::{Deserialize, Serialize, Serializer};
 use std::any::{type_name, TypeId};
 use std::fmt::format;
 use thiserror::Error;
+use crate::request::APIResponse;
+use crate::ServerSeekerError;
 
 /// A ServerSeeker client which stores the api key
 pub struct ServerSeekerClient {
@@ -78,23 +78,4 @@ impl ServerSeekerClient {
             _ => bail!("An unknown error occurred"),
         }
     }
-}
-
-/// A response from the ServerSeeker API
-#[derive(Debug, Error, Deserialize)]
-#[serde(untagged)]
-enum APIResponse<T> {
-    Error(ServerSeekerError),
-    Data(T),
-}
-
-#[derive(Error, Debug, Deserialize)]
-#[serde(untagged)]
-pub enum ServerSeekerError {
-    // Only for ServerSeekerClient::new_checked()
-    #[error("Invalid api_key")]
-    InvalidApiKey,
-
-    #[error("API returned error: {error:0}")]
-    APIError { error: String },
 }
