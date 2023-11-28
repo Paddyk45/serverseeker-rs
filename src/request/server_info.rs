@@ -2,6 +2,7 @@ use crate::ServerSeekerClient;
 use derive_builder::Builder;
 use serde::{Deserialize, Serialize, Serializer};
 use std::ops::{Range, RangeFrom};
+use reqwest::Method;
 
 /// The server ip/port
 #[derive(Serialize, Builder, Default)]
@@ -64,7 +65,7 @@ impl ServerSeekerClient {
     ) -> anyhow::Result<ServerInfoInfo> {
         let mut params = builder.build()?;
         Ok(self
-            .request::<ServerInfoInfo, _, _>("/server_info", params)
+            .request::<ServerInfoInfo, _, _>("/server_info", params, Method::POST)
             .await?)
     }
 }

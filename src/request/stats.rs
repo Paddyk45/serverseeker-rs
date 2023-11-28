@@ -1,4 +1,5 @@
 use std::fmt::format;
+use reqwest::Method;
 use serde::Deserialize;
 use crate::ServerSeekerClient;
 
@@ -16,6 +17,6 @@ pub struct Stats {
 
 impl ServerSeekerClient {
     pub async fn stats(&self) -> anyhow::Result<Stats> {
-        Ok(self.client.get(format!("{}/stats", Self::API_URL)).send().await?.json().await?)
+        Ok(self.request("/stats", "", Method::GET).await?)
     }
 }

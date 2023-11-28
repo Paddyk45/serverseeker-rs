@@ -1,7 +1,7 @@
 use anyhow::{bail, Error};
 use derive_builder::Builder;
 use reqwest::header::{HeaderMap, AUTHORIZATION};
-use reqwest::ClientBuilder;
+use reqwest::{ClientBuilder, Method};
 use serde::de::DeserializeOwned;
 use serde::{Deserialize, Serialize, Serializer};
 use std::any::{type_name, TypeId};
@@ -62,10 +62,10 @@ impl ServerSeekerClient {
         &self,
         endpoint: E,
         params: P,
+        method: Method
     ) -> anyhow::Result<T> {
         let res: APIResponse<T> = self
-            .client
-            .post(format!("{}{}", Self::API_URL, endpoint.to_string()))
+            .client.request(method, format!("{}{}", Self::API_URL, endpoint.to_string()))
             .header("Content-Type", "application/json")
             .json(&params)
             .send()
